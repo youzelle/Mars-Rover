@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Mars Rover Position</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <link rel="stylesheet" href="./index.css">
+        <script src="./lib/jasmine-2.0.0/jasmine.js"></script>
+      
+    </head>
+    <body class="container">
+        <div class="wrapper">
+            <h1>Mars Rover</h1>
+            <p id="intro">
+                A rover’s position and location is represented by a combination of x and y co-ordinates and a letter representing one of the four cardinal compass points. The plateau is divided up into a grid. An example position might be 0 0 N, which means the rover is in the bottom left corner and facing North. In order to control a rover enter a simple string of letters. The possible letters are ‘L’, ‘R’ and ‘M’. ‘L’ and ‘R’ makes the rover spin 90 degrees left or right respectively, without moving from its current spot. ‘M’ means move forward one grid point, and maintain the same heading. <br />
+                Enter a grid size, original positions and instructions to find the final position 
+                of your rover. <br />
+                Example Input: Gridsize: 5 5 | Original Location: 5 5 N | Instructions: LMRRMML
+            </p>
+            <form action="#" method="post" name="form_name" id="form_id" class="form_class">
+                <label>Grid Dimensions</label>
+                <input type="text" name="Grid_Dimen" id="gridDimen"> <br />
+                <label>Original Position</label>
+                <input type="text" name="originalPos" id="originalPos" /> <br />
+                <label>Instructions</label> 
+                <input type="text" name="instruction" id="instruction" /> <br />
+                <input type="submit" name="submit_id" id="btn_id" value="Submit" /> <br />
+                <label>Final Position</label> <br />
+                <p id="finalPosition"></p>
+            </form>
+        </div>
+      
+        <script src="src/marsRover.js"></script>
+        <script src="src/display.js"></script>
+    </body>
+</html>
