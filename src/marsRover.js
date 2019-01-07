@@ -1,3 +1,6 @@
+let obstacles = [[2, 2], [3, 1], [5, 3]];
+
+
 class Rover {
   constructor (gridSize, location, instructions) {
     if (!(/^\d\s\d\s?$/).test(gridSize)) {
@@ -18,47 +21,75 @@ class Rover {
     this.gridX = parseInt(gridSize.charAt(0));
     this.gridY = parseInt(gridSize.charAt(2));
     this.instructions = instructions;
+    this.travelLog = [];
+  }
+
+  isClear (orient, coord) {
+    for (let i = 0; i < obstacles.length; i++) {
+      if (orient == obstacles[i][coord]) {
+        alert('Obstacle, cannot move forward');
+        return false;
+      }
+    }
+    return true;
   }
 
   move () {
     switch (this.orientation) {
       case 'W': {
-        if (this.xCoordinate - 1 >= 0){
-        this.xCoordinate--;
-        } else {
-          alert( 'Invalid Move: West')
+        let orient = this.xCoordinate - 1;
+        let coord = 0;
+        if (this.isClear(orient, coord) && orient >= 0){
+          this.xCoordinate--;
+        } else if (orient >= 0) {
+          alert( 'Invalid Move West at ' + this.xCoordinate +","+ this.yCoordinate )
           this.xCoordinate;
+        } else {
+          return false;
         }
         break;
       }
       case 'N': {
-        if (this.yCoordinate + 1 <= this.gridY) {
+        let orient = this.yCoordinate + 1;
+        let coord = 1;
+        if (this.isClear(orient, coord) && orient <= this.gridY) {
         this.yCoordinate++;
-        } else {
-          alert( 'Invalid Move: North')
+        } else if (orient <= this.gridY) {
+          alert( 'Invalid Move North at ' + this.xCoordinate +","+ this.yCoordinate )
           this.yCoordinate;
+        } else {
+          return false;
         }
         break;
       }
       case 'E': {
-        if (this.xCoordinate + 1 <= this.gridX) {
+        let orient = this.xCoordinate + 1;
+        let coord = 0;
+        if (this.isClear(orient, coord) && orient <= this.gridX) {
         this.xCoordinate++;
-        } else {
-          alert( 'Invalid Move: East')
+        } else if (orient <= this.gridX) {
+          alert( 'Invalid Move East at ' + this.xCoordinate +","+ this.yCoordinate )
           this.xCoordinate;
+        } else {
+          return false;
         }
         break;
       }
       case 'S': {
-      if (this.yCoordinate - 1 >= 0) {
+        let orient = this.yCoordinate - 1
+        let coord = 1;
+      if (this.isClear(orient, coord) && orient >= 0) {
         this.yCoordinate--;
-      } else {
-        alert( 'Invalid Move: South')
+      } else if (this.yCoordinate - 1 >= 0) {
+        alert( 'Invalid Move South at ' + this.xCoordinate +","+ this.yCoordinate )
         this.yCoordinate;
+      } else {
+        return false;
       }
         break;
       }
     }
+    return [this.xCoordinate, this.yCoordinate];
   }
 
   rotate (dir) {
@@ -77,10 +108,12 @@ class Rover {
   executeInstructions () {
     let instructions = this.instructions.split('');
     for (let i = 0; i < instructions.length; i++) {
-          console.log(instructions, instructions[i])
       switch (instructions[i]) {
         case 'M':
         this.move();
+        if (this.move() === false) {
+          break;
+        }
         break;
         case 'R':
         this.rotate('R');
@@ -89,10 +122,13 @@ class Rover {
         this.rotate('L');
         break;
       }
-    console.log(this.xCoordinate, this.yCoordinate, this.orientation)
     }
     return `${this.xCoordinate} ` + `${this.yCoordinate} ` + `${this.orientation}`;
   }
 
 }
+
+var rover = new Rover('5 5', '3 3 E', 'MMM');
+
+//console.log(rover.executeInstructions())
 
