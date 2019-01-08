@@ -1,6 +1,5 @@
 let obstacles = [[2, 2], [3, 1], [5, 3]];
 
-
 class Rover {
   constructor (gridSize, location, instructions) {
     if (!(/^\d\s\d\s?$/).test(gridSize)) {
@@ -35,60 +34,67 @@ class Rover {
   }
 
   move () {
+    let orient;
+    let coord;
+    let insideBoundaries;
+    let changeCoordinate;
+
     switch (this.orientation) {
       case 'W': {
-        let orient = this.xCoordinate - 1;
-        let coord = 0;
-        if (this.isClear(orient, coord) && orient >= 0){
+        orient = this.xCoordinate - 1;
+        coord = 0;
+        insideBoundaries = orient >= 0;
+        changeCoordinate = () => {
           this.xCoordinate--;
-        } else if (orient >= 0) {
-          alert( 'Invalid Move West at ' + this.xCoordinate +","+ this.yCoordinate )
-          this.xCoordinate;
-        } else {
-          return false;
-        }
+        };
+
         break;
       }
       case 'N': {
-        let orient = this.yCoordinate + 1;
-        let coord = 1;
-        if (this.isClear(orient, coord) && orient <= this.gridY) {
-        this.yCoordinate++;
-        } else if (orient <= this.gridY) {
-          alert( 'Invalid Move North at ' + this.xCoordinate +","+ this.yCoordinate )
-          this.yCoordinate;
-        } else {
-          return false;
-        }
+        orient = this.yCoordinate + 1;
+        coord = 1;
+        insideBoundaries = orient <= this.gridY;
+        changeCoordinate = () => {
+          this.yCoordinate++;
+        };
+
         break;
       }
       case 'E': {
-        let orient = this.xCoordinate + 1;
-        let coord = 0;
-        if (this.isClear(orient, coord) && orient <= this.gridX) {
-        this.xCoordinate++;
-        } else if (orient <= this.gridX) {
-          alert( 'Invalid Move East at ' + this.xCoordinate +","+ this.yCoordinate )
-          this.xCoordinate;
-        } else {
-          return false;
-        }
+        orient = this.xCoordinate + 1;
+        coord = 0;
+        insideBoundaries = orient <= this.gridX;
+        changeCoordinate = () => {
+          this.xCoordinate++;
+        };
+
         break;
       }
       case 'S': {
-        let orient = this.yCoordinate - 1
-        let coord = 1;
-      if (this.isClear(orient, coord) && orient >= 0) {
-        this.yCoordinate--;
-      } else if (this.yCoordinate - 1 >= 0) {
-        alert( 'Invalid Move South at ' + this.xCoordinate +","+ this.yCoordinate )
-        this.yCoordinate;
-      } else {
-        return false;
-      }
+        orient = this.yCoordinate - 1;
+        coord = 1;
+        insideBoundaries = orient >= 0;
+        changeCoordinate = () => {
+          this.yCoordinate--;
+        };
         break;
       }
     }
+
+    console.group();
+    console.log('this.orientation', this.orientation);
+    console.log('insideBoundaries', insideBoundaries);
+    console.log('orient', orient);
+    console.log('coord', coord);
+    console.groupEnd();
+    
+    // Tries to make the move
+    if (insideBoundaries && this.isClear(orient, coord)) {
+      changeCoordinate();
+    } else {
+      return false;
+    }
+
     return [this.xCoordinate, this.yCoordinate];
   }
 
@@ -104,31 +110,37 @@ class Rover {
     return this.orientation;
   }
 
-
   executeInstructions () {
-    let instructions = this.instructions.split('');
+    const instructions = this.instructions.split('');
+    let stop;
     for (let i = 0; i < instructions.length; i++) {
       switch (instructions[i]) {
         case 'M':
-        this.move();
-        if (this.move() === false) {
-          break;
+        if(this.move() === false) {
+          stop = true;
         }
         break;
-        case 'R':
+      case 'R':
         this.rotate('R');
         break;
-        case 'L':
+      case 'L':
         this.rotate('L');
         break;
       }
+
+      if(stop) {
+        break;
+      }
     }
+
     return `${this.xCoordinate} ` + `${this.yCoordinate} ` + `${this.orientation}`;
   }
-
 }
 
 var rover = new Rover('5 5', '3 3 E', 'MMM');
 
-//console.log(rover.executeInstructions())
+var rover2 = new Rover('5 5', '3 2 E', 'M');
+console.log(rover2.executeInstructions()); 
+
+console.log(rover.executeInstructions()); 
 
